@@ -1,0 +1,28 @@
+name: Axios
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+     - cron: '*/1 * * * *' # 每5分钟一次，测试用
+
+jobs:
+  axios-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Auth API
+        uses: actionsflow/axios@v1
+        id: api
+        with:
+          url: https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/3cdccd8d-91ad-4c2b-a368-f16828629231
+          method: "POST"
+          # basic-auth: "${{ secrets.username }}:${{ secrets.password }}"
+      - run: echo ${{ steps.api.outputs.data }} 
+   
+
+      - name: Extract JSON Property 
+        id: extract-json
+        run: |
+          getToken=$(echo '${{ steps.api.outputs.data }}' | jq -r '.data.result.id')
+          echo "token=$getToken" >> $GITHUB_ENV  # 添加到环境变量里
