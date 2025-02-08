@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-     - cron: '0 */12 * * *' # 每5分钟一次，测试用
+     - cron: '0 */12 * * *' # 每12小时执行一次，测试用
 
 jobs:
   axios-action:
